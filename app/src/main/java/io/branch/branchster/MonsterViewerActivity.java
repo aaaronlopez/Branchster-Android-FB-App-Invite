@@ -23,6 +23,7 @@ import io.branch.branchster.util.MonsterImageView;
 import io.branch.branchster.util.MonsterPreferences;
 import io.branch.indexing.BranchUniversalObject;
 import io.branch.referral.Branch;
+import io.branch.referral.Branch.BranchLinkCreateListener;
 import io.branch.referral.BranchError;
 import io.branch.referral.SharingHelper;
 import io.branch.referral.util.CommerceEvent;
@@ -31,6 +32,11 @@ import io.branch.referral.util.LinkProperties;
 import io.branch.referral.util.Product;
 import io.branch.referral.util.ProductCategory;
 import io.branch.referral.util.ShareSheetStyle;
+
+import com.facebook.FacebookSdk;
+import com.facebook.share.model.AppInviteContent;
+import com.facebook.share.widget.AppInviteDialog;
+
 
 public class MonsterViewerActivity extends FragmentActivity implements InfoFragment.OnFragmentInteractionListener {
     private static String TAG = MonsterViewerActivity.class.getSimpleName();
@@ -96,6 +102,30 @@ public class MonsterViewerActivity extends FragmentActivity implements InfoFragm
             @Override
             public void onClick(View view) {
                 shareMyMonster();
+            }
+        });
+        //Facebook App Invite
+        findViewById(R.id.facebook_invite_btn).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //shareMyMonster();
+                LinkProperties linkProperties = new LinkProperties()
+                        .setChannel("Facebook")
+                        .setFeature("App Invite");
+                myMonsterObject_.generateShortUrl(MonsterViewerActivity.this, linkProperties, new BranchLinkCreateListener() {
+                    @Override
+                    public void onLinkCreate(String url, BranchError error) {
+                        Log.i("URL: ", url);
+                        if (error == null && AppInviteDialog.canShow()) {
+                            AppInviteContent content = new AppInviteContent.Builder()
+                                    .setApplinkUrl(url)
+                                    .setPreviewImageUrl("https://s3-us-west-1.amazonaws.com/host/zackspic.png")
+                                    .build();
+                            AppInviteDialog.show(MonsterViewerActivity.this, content);
+                        }
+                    }
+                });
+
             }
         });
     }
