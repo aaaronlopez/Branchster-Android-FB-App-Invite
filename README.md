@@ -2,12 +2,6 @@ Branchster-Android
 ==================
 
 ## Configuring Keys and Secrets
-This repository does not contain API keys so you need to define your own in order for the connected APIs to function. With the exception of the *Crashlytics ApiKey* (see the note below) the keys are defined as XML string resources and referenced at build-time. If you build the project as-is, you will get something like the following error:
-
-```
-Error: .. No resource found that matches the given name (at 'value' with value '@string/..').
-```
-
 To set up your own API keys and get rid of this error:
 
 1. Open up **api_keys.xml** which exists in the */res/values* folder.
